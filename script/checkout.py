@@ -86,6 +86,20 @@ git.exe %*'''
   with open("build/compute_build_timestamp.py", "w") as timestamp_file:
     timestamp_file.write(timestamp_file_contents)
 
+  # There's a bug in Windows.UI.Composition support code where surface is created with
+  # a DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT flag, but resized without it.
+  # According to MSDN, this leads to an error.
+  with open("src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp", "r") as swapchain11_file:
+    swapchain11_file_contents = swapchain11_file.read()
+
+  swapchain11_file_contents = swapchain11_file_contents.replace(
+    "getSwapChainNativeFormat(), 0);",
+    "getSwapChainNativeFormat(), desc.Flags);",
+  )
+
+  with open("src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp", "w") as swapchain11_file:
+    swapchain11_file.write(swapchain11_file_contents)
+
   return 0
 
 if __name__ == '__main__':
