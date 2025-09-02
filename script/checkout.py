@@ -55,7 +55,6 @@ def main():
   tools_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'depot_tools')
   gclient = 'gclient.bat' if 'windows' == common.host() else 'gclient'
   env = os.environ.copy()
-  env['DEPOT_TOOLS_UPDATE']='0'
   env['DEPOT_TOOLS_WIN_TOOLCHAIN']='0'
 
   # TODO: to be removed when depot_tools are fixed
