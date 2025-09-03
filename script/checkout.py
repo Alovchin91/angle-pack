@@ -58,20 +58,6 @@ def main():
   env = os.environ.copy()
   env['DEPOT_TOOLS_WIN_TOOLCHAIN']='0'
 
-  # TODO: to be removed when depot_tools are fixed
-  depot_tools_git_workaround = '''@echo off
-setlocal
-if not defined EDITOR set EDITOR=notepad
-:: Exclude the current directory when searching for executables.
-:: This is required for the SSO helper to run, which is written in Go.
-:: Without this set, the SSO helper may throw an error when resolving
-:: the `git` command (see https://pkg.go.dev/os/exec for more details).
-set "NoDefaultCurrentDirectoryInExePath=1"
-git.exe %*'''
-
-  with open(os.path.join(tools_dir, 'git.bat'), 'w') as git_bat_file:
-    print(depot_tools_git_workaround, file=git_bat_file)
-
   subprocess.check_call([os.path.join(tools_dir, gclient), 'sync'], env=env)
 
   # Apply patches
