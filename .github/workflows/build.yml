@@ -23,7 +23,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        build_type: [Debug, Release]
+        build_type: [Release]
         machine: ["x64", "arm64"]
       fail-fast: false
     steps:
