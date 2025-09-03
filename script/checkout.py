@@ -75,7 +75,10 @@ git.exe %*'''
   subprocess.check_call([os.path.join(tools_dir, gclient), 'sync'], env=env)
 
   # Apply patches
+  print('> Applying patches')
+
   subprocess.check_call(['git', 'apply', os.path.join(root_dir, '0001-Disable-compute-build-timestamp.patch')])
+  subprocess.check_call(['git', 'apply', os.path.join(root_dir, '0002-Fix-Windows-UI-Composition-SwapChain.patch')])
 
   return 0
 

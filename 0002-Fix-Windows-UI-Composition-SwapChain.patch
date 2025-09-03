@@ -1,0 +1,30 @@
+From c96799011acd23a4cac7be039f538abbff107654 Mon Sep 17 00:00:00 2001
+From: Alovchin91 <8490695+Alovchin91@users.noreply.github.com>
+Date: Wed, 3 Sep 2025 01:37:30 +0200
+Subject: [PATCH] There's a bug in Windows.UI.Composition support code where
+ surface is created with a DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT
+ flag, but resized without it. According to MSDN, this leads to an error.
+
+In fact, this flag is never used by any code in ANGLE, so we can simply remove it.
+---
+ .../renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp b/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp
+index 0e64f78d53..df34085649 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp
+@@ -118,9 +118,7 @@ HRESULT CompositorNativeWindow11::createSwapChain(ID3D11Device *device,
+     swapChainDesc.Scaling     = DXGI_SCALING_STRETCH;
+     swapChainDesc.SwapEffect  = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+     swapChainDesc.AlphaMode   = mHasAlpha ? DXGI_ALPHA_MODE_PREMULTIPLIED : DXGI_ALPHA_MODE_IGNORE;
+-#ifndef ANGLE_ENABLE_WINDOWS_UWP
+-    swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
+-#endif
++    swapChainDesc.Flags       = 0;
+     Microsoft::WRL::ComPtr<IDXGISwapChain1> swapChain1;
+     hr = factory2->CreateSwapChainForComposition(device, &swapChainDesc, nullptr, &swapChain1);
+     if (SUCCEEDED(hr))
+-- 
+2.50.1.windows.1
+
