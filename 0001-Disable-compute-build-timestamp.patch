@@ -1,0 +1,26 @@
+From 1478fccec68f63fddcb567c70c2738657e530fcc Mon Sep 17 00:00:00 2001
+From: Alovchin91 <8490695+Alovchin91@users.noreply.github.com>
+Date: Wed, 3 Sep 2025 01:46:51 +0200
+Subject: [PATCH] Calculating an official build's timestamp requires the
+ chrome/VERSION file
+
+---
+ build/compute_build_timestamp.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/compute_build_timestamp.py b/build/compute_build_timestamp.py
+index 838b3fae6..a79c5bcd7 100755
+--- a/build/compute_build_timestamp.py
++++ b/build/compute_build_timestamp.py
+@@ -117,7 +117,7 @@ def main():
+   # use the link timestamp as the prime differentiator, but for unofficial
+   # builds we do lots of quantization to avoid churn.
+   offset = 0
+-  if args.build_type == 'official':
++  if args.build_type == 'please_no':
+     if os.name == 'nt':
+       version_path = os.path.join(THIS_DIR, os.pardir, 'chrome', 'VERSION')
+       with open(version_path) as f:
+-- 
+2.50.1.windows.1
+

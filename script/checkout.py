@@ -3,7 +3,8 @@
 import common, os, re, subprocess, sys
 
 def main():
-  os.chdir(os.path.join(os.path.dirname(__file__), os.pardir))
+  root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
+  os.chdir(root_dir)
 
   parser = common.create_parser(True)
   args = parser.parse_args()
@@ -52,7 +53,7 @@ def main():
   with open('.gclient', 'w') as gclient_file:
     print(gclient_config.format(commit), file=gclient_file)
 
-  tools_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'depot_tools')
+  tools_dir = os.path.join(root_dir, 'depot_tools')
   gclient = 'gclient.bat' if 'windows' == common.host() else 'gclient'
   env = os.environ.copy()
   env['DEPOT_TOOLS_WIN_TOOLCHAIN']='0'
@@ -73,17 +74,8 @@ git.exe %*'''
 
   subprocess.check_call([os.path.join(tools_dir, gclient), 'sync'], env=env)
 
-  # Calculating an official build's timestamp requires the chrome/VERSION file
-  with open("build/compute_build_timestamp.py", "r") as timestamp_file:
-    timestamp_file_contents = timestamp_file.read()
-
-  timestamp_file_contents = timestamp_file_contents.replace(
-    "if args.build_type == 'official':",
-    "if args.build_type == 'please_no':",
-  )
-
-  with open("build/compute_build_timestamp.py", "w") as timestamp_file:
-    timestamp_file.write(timestamp_file_contents)
+  # Apply patches
+  subprocess.check_call(['git', 'apply', os.path.join(root_dir, '0001-Disable-compute-build-timestamp.patch')])
 
   return 0
 
