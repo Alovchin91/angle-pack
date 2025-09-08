@@ -21,7 +21,6 @@ def main():
   out_bin = 'out/' + build_type + '-' + target + '-' + machine
 
   globs = [
-    out_bin + '/d3dcompiler_47.dll',
     out_bin + '/libEGL.*',
     out_bin + '/libGLESv2.*',
   ]

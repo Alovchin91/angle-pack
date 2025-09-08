@@ -3,7 +3,7 @@
 import common, os, re, subprocess, sys
 
 def main():
-  root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
+  root_dir = os.path.dirname(os.path.dirname(__file__))
   os.chdir(root_dir)
 
   parser = common.create_parser(True)
@@ -59,6 +59,13 @@ def main():
   env['DEPOT_TOOLS_WIN_TOOLCHAIN']='0'
 
   subprocess.check_call([os.path.join(tools_dir, gclient), 'sync'], env=env)
+
+  # Setup WinAppSDK
+  print('> Setting up Windows App SDK')
+
+  winappsdk_path = os.path.join(root_dir, 'winappsdk')
+
+  subprocess.check_call(['python3', os.path.join('scripts', 'winappsdk_setup.py'), '--output', winappsdk_path], env=env)
 
   # Apply patches
   print('> Applying patches')
