@@ -28,6 +28,7 @@ def main():
     'angle_has_rapidjson=false',
     'angle_build_all=false',
     'is_component_build=false',
+    'use_siso=false',
   ]
 
   tools_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'depot_tools')
@@ -41,7 +42,7 @@ def main():
 
   print([os.path.join(tools_dir, gn), 'gen', out, '--args=' + ' '.join(args)])
   subprocess.check_call([os.path.join(tools_dir, gn), 'gen', out, '--args=' + ' '.join(args)], env=env)
-  subprocess.check_call(['python3', os.path.join(tools_dir, 'autoninja.py'), '-C', out, 'libEGL', 'libGLESv2'], env=env)
+  subprocess.check_call(['python3', os.path.join(tools_dir, 'autoninja.py'), '--offline', '-C', out, 'libEGL', 'libGLESv2'], env=env)
 
   return 0
 

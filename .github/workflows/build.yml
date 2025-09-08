@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 env:
-  version: ec4d8f8e4d
+  version: b6b2f38081
 
 jobs:
   windows:
