@@ -34,11 +34,7 @@ def main():
     for glob in globs:
       for path in pathlib.Path().glob(glob):
         if not path.is_dir():
-          for dir in parents(path):
-            if not dir in dirs:
-              zip.write(str(dir))
-              dirs.add(dir)
-          zip.write(str(path))
+          zip.write(str(path), path.name)
 
   return 0
 
