@@ -1,0 +1,26 @@
+From e95c8458b3900d976b14dd73e5b87393d4b16fb8 Mon Sep 17 00:00:00 2001
+From: Alovchin91 <8490695+Alovchin91@users.noreply.github.com>
+Date: Wed, 28 Jan 2026 14:02:47 +0200
+Subject: [PATCH] Set SwapChainDesc.Scaling to DXGI_SCALING_NONE
+
+An attempt to fix D3D surface jumping on window resizing.
+---
+ .../renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp b/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp
+index 0e64f78d53..df34085649 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp
+@@ -115,7 +115,7 @@ HRESULT CompositorNativeWindow11::createSwapChain(ID3D11Device *device,
+     swapChainDesc.BufferUsage =
+         DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_BACK_BUFFER | DXGI_USAGE_SHADER_INPUT;
+     swapChainDesc.BufferCount = 2;
+-    swapChainDesc.Scaling     = DXGI_SCALING_STRETCH;
++    swapChainDesc.Scaling     = DXGI_SCALING_NONE;
+     swapChainDesc.SwapEffect  = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+     swapChainDesc.AlphaMode   = mHasAlpha ? DXGI_ALPHA_MODE_PREMULTIPLIED : DXGI_ALPHA_MODE_IGNORE;
+     swapChainDesc.Flags       = 0;
+-- 
+2.50.1.windows.1
+
